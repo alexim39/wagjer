@@ -1,6 +1,7 @@
 const { UserModel, SignUpValidator } = require('../../models/user');
 const bcrypt = require('bcryptjs');
 const { EmailClass } = require('./../email/email')
+const ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = class SignUp {
 
@@ -32,7 +33,8 @@ module.exports = class SignUp {
                 email: req.body.email,
                 password: hash,
                 tnc: req.body.tnc,
-                newsLetter: req.body.newsLetter
+                newsLetter: req.body.newsLetter,
+                referer: userSignUp.getReferer(req.body.referer)
             }).save();
 
             if (user) {
@@ -44,6 +46,7 @@ module.exports = class SignUp {
                return res.status(404).json({ msg: `Account creation failed`, code: 404 });
             }
         } catch (error) {
+            console.log(error)
             return res.status(500).json({ msg: `Sign up process failed`, code: 500 });
         }
     }
@@ -53,5 +56,19 @@ module.exports = class SignUp {
         //Can change 7 to 2 for longer results.
         const r = (Math.random() + 1).toString(36).substring(7);
         return `${firstname}_${lastname}_${r}`;
+    }
+
+    getReferer(refererId) {
+        if (!refererId) {
+            return
+        } else {
+            
+            // check if username is objectId
+            const stringId = refererId.toString().toLowerCase();
+
+            if (ObjectId.isValid(stringId) && new ObjectId(stringId) == stringId) {
+                return stringId;
+            }
+        }
     }
 }

@@ -24,5 +24,7 @@ router.post('/removerateup', verifyToken, User.removeRateUpUser);
 router.post('/addratedown', verifyToken, User.addRateDownUser);
 // rate down user
 router.post('/removeratedown', verifyToken, User.removeRateDownUser);
+// get user referers
+router.get('/referers/:userId', verifyToken, User.getUserReferers);
 
 module.exports = router;

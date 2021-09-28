@@ -66,6 +66,10 @@ exports.UserModel = new mongoose.model('User', new mongoose.Schema({
     about: {
         type: String
     },
+    referer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    },
     followers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

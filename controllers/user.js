@@ -151,16 +151,18 @@ module.exports = class User {
     }
 
     // raport a user
-    /* static async reportUser(req, res) {
+    static async getUserReferers(req, res) {
         try {
             jwt.verify(req.token, config.server.token);
 
-            console.log(req.body)
+            const users = await UserModel.find({referer: req.params.userId });
+           if (!users) return res.status(404).json({ msg: `User referers access failed`, code: 404 });
+           return res.status(200).json({ msg: `user referers found`, code: 200, obj: users });
 
         } catch (error) {
             console.log(error)
-            return res.status(500).json({ msg: `User report process failed`, code: 500 });
+            return res.status(500).json({ msg: `User referer access process failed`, code: 500 });
         }
-    } */
+    }
 
 }
